@@ -1,0 +1,9 @@
+{
+"name":"DG Work Manager",
+"short_name":"DG Work",
+"start_url":"./",
+"display":"standalone",
+"background_color":"#f4f7fb",
+"theme_color":"#1976d2",
+"icons":[]
+}

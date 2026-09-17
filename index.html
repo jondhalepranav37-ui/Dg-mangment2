@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1976d2">
+<link rel="manifest" href="manifest.json">
+<title>DG Work Manager</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#1976d2;color:white;padding:16px;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:21px} header p{margin:5px 0 0;font-size:12px;opacity:.9}
+main{max-width:900px;margin:auto;padding:12px 12px 80px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:12px}
+.card{background:white;border-radius:12px;padding:12px;box-shadow:0 2px 8px #0001}.card b{font-size:22px}.card span{display:block;font-size:12px;color:#667085;margin-top:3px}
+.panel{background:white;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px #0001}
+h2{font-size:17px;margin:0 0 12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+input,select,textarea,button{width:100%;padding:11px;border:1px solid #d7dce5;border-radius:9px;font-size:14px}
+textarea{min-height:70px;resize:vertical}button{border:0;background:#1976d2;color:#fff;font-weight:bold;cursor:pointer}.secondary{background:#e8f1fb;color:#145ca8}.danger{background:#e53935}.small{padding:8px;font-size:12px}
+.task{border:1px solid #e1e5eb;border-radius:10px;padding:11px;margin:8px 0;background:#fff}
+.task-top{display:flex;justify-content:space-between;gap:8px}.task-title{font-weight:bold}.meta{font-size:12px;color:#667085;margin-top:5px;line-height:1.5}
+.badge{font-size:11px;padding:4px 7px;border-radius:20px;background:#edf3f9;white-space:nowrap}
+.actions{display:flex;gap:6px;margin-top:9px}.actions button{flex:1}
+.hidden{display:none}.empty{color:#777;text-align:center;padding:15px;font-size:13px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;z-index:10}
+nav button{border-radius:0;background:white;color:#475467;padding:12px 4px;font-size:11px}
+nav button.active{color:#1976d2;font-weight:bold}
+@media(min-width:650px){.cards{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><h1>DG Work Manager</h1><p>Simple • Offline • Data stays on this phone</p></header>
+<main>
+<section id="dashboard" class="screen">
+<div class="cards">
+<div class="card"><b id="activeCount">0</b><span>Active Work</span></div>
+<div class="card"><b id="pendingCount">0</b><span>Pending</span></div>
+<div class="card"><b id="completedCount">0</b><span>Completed</span></div>
+<div class="card"><b id="paymentCount">0</b><span>Payment Pending</span></div>
+</div>
+<div class="panel"><h2>Today's / Urgent Work</h2><div id="urgentList"></div></div>
+<div class="panel"><h2>All Active Work</h2><div id="taskList"></div></div>
+</section>
+
+<section id="add" class="screen hidden">
+<div class="panel">
+<h2>Add New Work</h2>
+<div class="row">
+<input id="customer" placeholder="Customer name">
+<input id="dgno" placeholder="DG / Genset No.">
+</div><br>
+<select id="type">
+<option>Alternator</option><option>Breakdown</option><option>Servicing</option><option>Installation</option>
+<option>Engine Repair / Overhauling</option><option>Engine Open / Fitting</option><option>Control Panel</option>
+<option>AMC</option><option>DG Hire / Rent</option><option>Spare Parts</option>
+<option>Payment / Outstanding</option><option>Customer Management</option><option>Parcel / Material</option><option>Other</option>
+</select><br><br>
+<input id="title" placeholder="Work details (e.g. 40 KVA alternator check)"><br><br>
+<div class="row">
+<input id="due" type="date">
+<select id="priority"><option>Normal</option><option>Urgent</option></select>
+</div><br>
+<textarea id="notes" placeholder="Notes / parts needed / phone follow-up"></textarea><br><br>
+<button onclick="addTask()">Save Work</button>
+</div>
+</section>
+
+<section id="history" class="screen hidden">
+<div class="panel"><h2>Completed History</h2><div id="historyList"></div></div>
+</section>
+
+<section id="settings" class="screen hidden">
+<div class="panel">
+<h2>Backup & Data</h2>
+<p style="font-size:13px;color:#667085">Data is saved locally in this browser. Use backup regularly so your work is not lost if the phone/browser data is cleared.</p>
+<button onclick="exportData()">Download Backup</button><br><br>
+<input type="file" id="importFile" accept=".json" onchange="importData(event)">
+<br><br><button class="secondary" onclick="clearCompleted()">Clear Completed History</button><br><br>
+<button class="danger" onclick="resetAll()">Delete All Data</button>
+</div>
+<div class="panel"><h2>How it works</h2><p style="font-size:13px;line-height:1.6">Add every job. The dashboard shows active, pending and payment items. Mark work complete when finished. Use Backup regularly.</p></div>
+</section>
+</main>
+
+<nav>
+<button id="nav-dashboard" class="active" onclick="show('dashboard',this)">🏠<br>Dashboard</button>
+<button id="nav-add" onclick="show('add',this)">➕<br>Add Work</button>
+<button id="nav-history" onclick="show('history',this)">✓<br>History</button>
+<button id="nav-settings" onclick="show('settings',this)">⚙<br>Settings</button>
+</nav>
+<script src="app.js"></script>
+</body>
+</html>
